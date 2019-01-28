@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 
 import classes from './Burger.module.css';
 import Ingredient from './Ingredients/Ingredients';
@@ -28,4 +29,5 @@ const burger = (props) => {
     );
 };
 
-export default burger;
+// we use the withRouter HOC here to enable history and match props
+export default withRouter(burger);
