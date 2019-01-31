@@ -8,12 +8,8 @@ class Checkout extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ingredients: {
-                salad: 1,
-                meat: 1,
-                cheese: 1,
-                bacon: 1
-            }
+            ingredients: null,
+            price: 0
         };
     }
 
@@ -21,12 +17,19 @@ class Checkout extends Component {
         // we use this to consume the query string we created in BurgerBuilder
         const query = new URLSearchParams(this.props.location.search);
         const ingredients = {};
+        let price = 0;
         for (let param of query.entries()) {
             // ['salad', '1']
-            ingredients[param[0]] = +param[1]
+            if (param[0] === 'price') {
+                price = param[1];
+            } else {
+                ingredients[param[0]] = +param[1]
+            }
+
         }
         this.setState({
-            ingredients: ingredients
+            ingredients: ingredients,
+            totalPrice: price
         })
     }
 
@@ -47,7 +50,11 @@ class Checkout extends Component {
                     onCheckoutCancel={this.checkoutCancelHandler}
                     onCheckoutContinue={this.checkoutContinueHandler}
                 />
-                <Route path={this.props.match.path + '/contact-data'} component={ContactData} />
+                <Route
+                    path={this.props.match.path + '/contact-data'}
+                    render={() => (<ContactData
+                        ingredients={this.state.ingredients}
+                        price={this.state.totalPrice} />)} />
             </div>
         )
     }
