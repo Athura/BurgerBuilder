@@ -13,7 +13,7 @@ class Checkout extends Component {
         };
     }
 
-    componentDidMount() {
+    componentWillMount() {
         // we use this to consume the query string we created in BurgerBuilder
         const query = new URLSearchParams(this.props.location.search);
         const ingredients = {};
@@ -41,7 +41,7 @@ class Checkout extends Component {
     checkoutContinueHandler = () => {
         this.props.history.replace('/checkout/contact-data');
     }
-
+    // We send props to contact data to enable history
     render() {
         return (
             <div>
@@ -52,9 +52,10 @@ class Checkout extends Component {
                 />
                 <Route
                     path={this.props.match.path + '/contact-data'}
-                    render={() => (<ContactData
+                    render={(props) => (<ContactData
                         ingredients={this.state.ingredients}
-                        price={this.state.totalPrice} />)} />
+                        price={this.state.totalPrice}
+                        {...props} />)} />
             </div>
         )
     }

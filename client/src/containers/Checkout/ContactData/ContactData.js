@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Button from '../../../components/UI/Button/Button';
+import Spinner from '../../../components/UI/Spinner/Spinner';
 import classes from './ContactData.module.css';
 import axios from '../../../axios-orders';
 
@@ -43,25 +44,22 @@ class ContactData extends Component {
         axios.post('/orders.json', order)
             .then(res => {
                 this.setState({
-                    loading: false,
-                    purchasing: false
+                    loading: false
                 })
+                this.props.history.push('/')
             })
             .catch(err => {
                 this.setState({
-                    loading: false,
-                    purchasing: false
+                    loading: false
                 })
             })
     }
 
     render() {
-        return (
-            <div className = {classes.ContactData}>
-                <h4>Enter your contact information here:</h4>
-                <form>
+        let form = (
+            <form>
                     <input className={classes.Input} type="text" name="name" placeholder="Your Name" />
-                    <input className={classes.Input} type="email" name="email" placeholder="Your email" />
+                    <input className={classes.Input} type="email" name="ssoUserName" placeholder="Your email" />
                     <input className={classes.Input} type="text" name="street" placeholder="Your street information" />
                     <input className={classes.Input} type="text" name="postal" placeholder="Your postal code" />
                     <Button
@@ -69,6 +67,14 @@ class ContactData extends Component {
                         onClick={this.orderHandler}
                     >ORDER</Button>
                 </form>
+        );
+        if (this.state.loading) {
+            form = <Spinner />
+        }
+        return (
+            <div className = {classes.ContactData}>
+                <h4>Enter your contact information here:</h4>
+                {form}
             </div>
         )
     }
